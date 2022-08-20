@@ -3,15 +3,27 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "-": "0.0.1",
+    "@nuxtjs/i18n": "^7.2.3",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.3.0",
     "@testing-library/user-event": "^13.5.0",
+    "axios": "^0.27.2",
+    "cross-env": "^7.0.3",
+    "env-cmd": "^10.1.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-redux": "^8.0.2",
     "react-scripts": "5.0.1",
+    "redux": "^4.2.0",
+    "save-dev": "0.0.1-security",
     "web-vitals": "^2.1.4"
   },
   "scripts": {
+    "start:stag": "env-cmd -f ./environments/.dev.env react-scripts start",
+    "start:prod": "env-cmd -f ./environments/.prod.env react-scripts start",
+    "build:stag": "env-cmd -f ./environments/.dev.env react-scripts build",
+    "build:prod": "env-cmd -f ./environments/.prod.env react-scripts build",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
@@ -34,5 +46,11 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "autoprefixer": "^10.4.8",
+    "postcss": "^8.4.16",
+    "react-router-dom": "^6.3.0",
+    "tailwindcss": "^3.1.8"
   }
 }
