@@ -28,7 +28,7 @@ const LoggerSearch = ({ dates, dispatch }) => {
   }, []);
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
-    setPagination(parseInt(params.get("pagination")));
+    setPagination(parseInt(params.get("pagination"))|0);
 
     if (dates) {
       let someArray = dates.data.result.auditLog;
