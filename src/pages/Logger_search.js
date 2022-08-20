@@ -4,7 +4,7 @@ import React, { useState, useEffect } from "react";
 import { fetchData } from "../store/actions";
 import { Outlet, Link } from "react-router-dom";
 
-const Appointments = ({ dates, dispatch }) => {
+const LoggerSearch = ({ dates, dispatch }) => {
   const [mode, setMode] = useState("light");
 
   const [mainData, setData] = useState("");
@@ -210,4 +210,4 @@ const Appointments = ({ dates, dispatch }) => {
   );
 };
 
-export default Appointments;
+export default LoggerSearch;
