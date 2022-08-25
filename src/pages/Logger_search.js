@@ -2,20 +2,96 @@ import light from "../images/light.svg";
 import dark from "../images/dark.svg";
 import React, { useState, useEffect } from "react";
 import { fetchData } from "../store/actions";
-import { Outlet, Link } from "react-router-dom";
+import { Outlet, Link ,useSearchParams} from "react-router-dom";
 
 const LoggerSearch = ({ dates, dispatch }) => {
   const [mode, setMode] = useState("light");
 
   const [mainData, setData] = useState("");
+  const [applicationsTypes,setApplicationsTypes ] = useState("")
+  const [actionsTypes,setActionTypes ] = useState("")
+
+  const [employeeName,setEmployeeName ] = useState("")
+
+  const [applicationType,setApplicationType ] = useState("")
+
+  const [actionType,setActionType ] = useState("")
+
+  const [fromDate,setFromDate ] = useState("")
+
+  const [toDate,setToDate ] = useState("")
+
+  const [applicationID,setApplicationID ] = useState("")
+
 
   const [pagination, setPagination] = useState(0);
+
+
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  
 
   const chandeMode = (userMode) => {
     document.documentElement.classList.remove(mode);
     document.documentElement.classList.add(userMode);
     setMode(userMode);
   };
+
+  const handleChangeEmployeeName = e => {
+    setEmployeeName(e.target.value);
+};
+
+const handleChangeApplicationType = e => {
+  setApplicationType(e.target.value);
+};
+
+const handleChangeActionType = e => {
+  setActionType(e.target.value);
+};
+const handleChangeFromDate= e => {
+  setFromDate(e.target.value);
+};
+const handleChangeToDate = e => {
+  setToDate(e.target.value);
+};
+const handleChangeApplicationID = e => {
+  setApplicationID(e.target.value);
+};
+
+const handleSearch = ()=>{
+  const params = new URLSearchParams(window.location.search);
+
+  setSearchParams({pagination: params.get("pagination")|0,"employee-name":employeeName,"application-type":applicationType,"action-type":actionType,"from-date":fromDate,"to-date":toDate,"application-id":applicationID});
+  filterMainData()
+}
+
+
+const filterMainData = ()=>{
+  
+  let data =  dates.data.result.auditLog
+ 
+    if(applicationID){
+      data = data.filter((obj)=>obj.applicationId && obj.applicationId.toString().includes(applicationID))
+    }
+    if(applicationType){
+      data = data.filter((obj)=>obj.applicationType && obj.applicationType.toString().includes(applicationType))
+    }
+    if(actionType){
+      data = data.filter((obj)=>obj.actionType && obj.actionType.toString().includes(actionType))
+    }
+    if(employeeName){
+      data = data.filter((obj)=>obj.userAgent && obj.userAgent.toString().includes(employeeName))
+    }
+    if(toDate){
+      data = data.filter((obj)=>obj.creationTimestamp &&( new Date( new Date(obj.creationTimestamp.split(' ')[0]).toLocaleDateString()).valueOf() <= new Date(new Date(toDate).toLocaleDateString()).valueOf() ))
+    }
+    if(fromDate){
+      data = data.filter((obj)=>obj.creationTimestamp &&( new Date( new Date(obj.creationTimestamp.split(' ')[0]).toLocaleDateString()).valueOf() >= new Date(new Date(fromDate).toLocaleDateString()).valueOf() ))
+    }
+
+
+    setData([...chunks( data, 10)]);
+}
 
   function* chunks(arr, n) {
     for (let i = 0; i < arr.length; i += n) {
@@ -26,14 +102,22 @@ const LoggerSearch = ({ dates, dispatch }) => {
   useEffect(() => {
     fetchData(dispatch);
   }, []);
+
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
     setPagination(parseInt(params.get("pagination"))|0);
+    setApplicationID(params.get("application-id"));
+    setEmployeeName(params.get("employee-name"));
+    setToDate(params.get("to-date"));
+    setFromDate(params.get("from-date"));
+    setActionType(params.get("action-type"))
+    setApplicationType(params.get("application-type"))
 
     if (dates) {
-      let someArray = dates.data.result.auditLog;
+      setApplicationsTypes([...new Set( dates.data.result.auditLog.filter((obj)=> obj.applicationType != null).map((obj)=>obj.applicationType))])
+      setActionTypes([...new Set( dates.data.result.auditLog.filter((obj)=> obj.actionType != null).map((obj)=>obj.actionType))])
 
-      setData([...chunks(someArray, 10)]);
+      setData([...chunks( dates.data.result.auditLog, 10)]);
     }
   }, [dates]);
 
@@ -46,6 +130,66 @@ const LoggerSearch = ({ dates, dispatch }) => {
             className="w-7 mx-2 cursor-pointer "
           />
       </header>
+
+
+      <section className=" flex items-center flex-wrap justify-center">
+
+      <div  className=" w-[150px] mr-4">
+            <label for="employee_name" className="block mb-1 text-sm text-gray-900 dark:text-gray-300">Employee Name</label>
+            <input value={employeeName} onChange={handleChangeEmployeeName} type="text" id="employee_name" className="block px-2  py-1 mb-6 w-full text-sm text-gray-500  rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="John" />
+        </div>
+
+            <div className=" w-[150px] mr-4">
+            <label for="small" className="block mb-1 text-sm text-gray-900 dark:text-gray-300">Application Type</label>
+            <select value={applicationType}  onChange={handleChangeApplicationType}  id="small" className="block px-2  py-1 mb-6 w-full text-sm text-gray-500  rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+            <option value=""></option>
+            {actionsTypes
+              ? actionsTypes.map((opject, i) => {
+                  return (
+                    <option value={opject}>{opject}</option>
+                  );
+                })
+              :<option value="No Data">No Data</option>}
+            </select>
+            </div>
+
+            <div className=" w-[150px] mr-4">
+            <label for="small" className="block mb-1 text-sm text-gray-900 dark:text-gray-300">Action Type</label>
+            <select  value={actionType}  onChange={handleChangeActionType}  id="small" className="block px-2  py-1 mb-6 w-full text-sm text-gray-500  rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+            <option value=""></option>
+            {actionsTypes
+              ? actionsTypes.map((opject, i) => {
+                  return (
+                    <option value={opject}>{opject}</option>
+                  );
+                })
+              :<option value="No Data">No Data</option>}
+            </select>
+            </div>
+
+
+            <div  className=" w-[150px] mr-4">
+            <label for="first_name" className="block mb-1 text-sm text-gray-900 dark:text-gray-300">From Date</label>
+            <input  value={fromDate} onChange={handleChangeFromDate}  type="date" id="first_name" className="block px-2  py-1 mb-6 w-full text-sm text-gray-500  rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+             placeholder="Select date" />
+        </div>
+        <div  className=" w-[150px] mr-4">
+            <label for="first_name" className="block mb-1 text-sm text-gray-900 dark:text-gray-300">To Date</label>
+            <input value={toDate} onChange={handleChangeToDate} type="date" id="first_name" className="block px-2  py-1 mb-6 w-full text-sm text-gray-500  rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+             placeholder="Select date" />
+        </div>
+
+        <div  className=" w-[150px] mr-4">
+            <label for="first_name" className="block mb-1 text-sm text-gray-900 dark:text-gray-300">Application ID</label>
+            <input value={applicationID} onChange={handleChangeApplicationID} type="text" id="first_name" className="block px-2  py-1 mb-6 w-full text-sm text-gray-500  rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+             placeholder="Select date" />
+        </div>
+
+        <button   onClick={() => handleSearch()}   type="submit" className="text-white  w-[150px] bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Search Logger </button>
+
+
+      </section>
+      
 
       <div className="overflow-x-auto relative shadow-md sm:rounded-lg">
         <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
@@ -187,7 +331,7 @@ const LoggerSearch = ({ dates, dispatch }) => {
                 to={"/?pagination=" + (pagination + 1)}
               >
                 <svg
-                  class="w-5 h-5"
+                  className="w-5 h-5"
                   aria-hidden="true"
                   fill="currentColor"
                   viewBox="0 0 20 20"
