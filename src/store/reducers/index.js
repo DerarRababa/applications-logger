@@ -1,7 +1,7 @@
 import { combineReducers } from 'redux'
-import dates from './dates'
+import data from './data'
 
 export default combineReducers({
-  dates,
+  data,
 })
  

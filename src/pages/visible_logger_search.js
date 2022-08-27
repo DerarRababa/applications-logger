@@ -4,7 +4,7 @@ import Logger_search from "./Logger_search"
 
 
 const mapStateToProps = (state) => ({
-  dates: state.dates
+  data: state.data
 });
 
 

@@ -1,6 +1,6 @@
 
 
-const dates = (state ='', action) => {
+const data = (state ='', action) => {
     switch (action.type) {
       case 'GET_DATA':
       return action.data
@@ -9,5 +9,5 @@ const dates = (state ='', action) => {
     }
   }
   
-  export default dates
+  export default data
   
