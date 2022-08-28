@@ -25,7 +25,9 @@ const LoggerSearch = ({ data, dispatch }) => {
   ) => {
     const params = new URLSearchParams(window.location.search);
 
-    setSearchParams({
+    setSearchParams();
+
+    var paramsOpj={
       pagination: params.get("pagination") | 0,
       "employee-name": employeeName,
       "application-type": applicationType,
@@ -33,58 +35,64 @@ const LoggerSearch = ({ data, dispatch }) => {
       "from-date": fromDate,
       "to-date": toDate,
       "application-id": applicationID,
-    });
+    }
+for(var key in paramsOpj){
+  if(! paramsOpj[key]){
+   delete paramsOpj[key];
+  }
+}
+setSearchParams(paramsOpj);
 
-    let data = data.data.result.auditLog;
+    let dataResult = data.data.result.auditLog;
 
     if (applicationID) {
-      data = data.filter(
+      dataResult = dataResult.filter(
         (obj) =>
           obj.applicationId &&
           obj.applicationId.toString().includes(applicationID)
       );
     }
     if (applicationType) {
-      data = data.filter(
+      dataResult = dataResult.filter(
         (obj) =>
           obj.applicationType &&
           obj.applicationType.toString().includes(applicationType)
       );
     }
     if (actionType) {
-      data = data.filter(
+      dataResult = dataResult.filter(
         (obj) =>
           obj.actionType && obj.actionType.toString().includes(actionType)
       );
     }
     if (employeeName) {
-      data = data.filter(
+      dataResult = dataResult.filter(
         (obj) =>
           obj.userAgent && obj.userAgent.toString().includes(employeeName)
       );
     }
     if (toDate) {
-      data = data.filter(
+      dataResult = dataResult.filter(
         (obj) =>
           obj.creationTimestamp &&
           new Date(
-            new Date(obj.creationTimestamp.split(" ")[0]).toLocaledatatring()
+            new Date(obj.creationTimestamp.split(" ")[0]).toLocaleDateString()
           ).valueOf() <=
-            new Date(new Date(toDate).toLocaledatatring()).valueOf()
+            new Date(new Date(toDate).toLocaleDateString()).valueOf()
       );
     }
     if (fromDate) {
-      data = data.filter(
+      dataResult = dataResult.filter(
         (obj) =>
           obj.creationTimestamp &&
           new Date(
-            new Date(obj.creationTimestamp.split(" ")[0]).toLocaledatatring()
+            new Date(obj.creationTimestamp.split(" ")[0]).toLocaleDateString()
           ).valueOf() >=
-            new Date(new Date(fromDate).toLocaledatatring()).valueOf()
+            new Date(new Date(fromDate).toLocaleDateString()).valueOf()
       );
     }
 
-    setData([...chunks(data, 10)]);
+    setData([...chunks(dataResult, 10)]);
   };
 
   function* chunks(arr, n) {
