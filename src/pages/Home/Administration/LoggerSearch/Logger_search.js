@@ -27,7 +27,7 @@ const LoggerSearch = ({ data, dispatch }) => {
 
     setSearchParams();
 
-    var paramsOpj={
+    var paramsOpj = {
       pagination: params.get("pagination") | 0,
       "employee-name": employeeName,
       "application-type": applicationType,
@@ -35,13 +35,13 @@ const LoggerSearch = ({ data, dispatch }) => {
       "from-date": fromDate,
       "to-date": toDate,
       "application-id": applicationID,
+    };
+    for (var key in paramsOpj) {
+      if (!paramsOpj[key]) {
+        delete paramsOpj[key];
+      }
     }
-for(var key in paramsOpj){
-  if(! paramsOpj[key]){
-   delete paramsOpj[key];
-  }
-}
-setSearchParams(paramsOpj);
+    setSearchParams(paramsOpj);
 
     let dataResult = data.data.result.auditLog;
 
