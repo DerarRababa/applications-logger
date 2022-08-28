@@ -8,7 +8,7 @@ import { Provider } from "react-redux";
 import rootReducer from "../store/reducers";
 import { createStore } from "redux";
 
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route,Navigate  } from "react-router-dom";
 import { Link } from "react-router-dom";
 import Header from "../components/Header";
 
@@ -22,6 +22,8 @@ const DefaultLayout = () => {
        <Header />
 
         <Routes>
+        <Route path="/" element={<Navigate replace to="/home/administration/logger-search" />} />
+
           <Route path="/home/administration/logger-search" element={<VisibleLoggerSearch />}>
           </Route>
           <Route path="/home" element={<Home />}>
