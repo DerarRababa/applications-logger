@@ -15,6 +15,62 @@ const LoggerSearch = ({ data, dispatch }) => {
 
   const [searchParams, setSearchParams] = useSearchParams();
 
+
+
+  const sortData = (sortType)=>{
+    let dataResult =[...data.data.result.auditLog];
+    if(sortType == 'AscendingLogID'){
+      dataResult=  dataResult.sort((a, b) => a.logId - b.logId);
+    }
+    if(sortType == 'DescendingLogID'){
+      dataResult=  dataResult.sort((a, b) => a.logId - b.logId).reverse();
+    }
+    if(sortType == 'AscendingApplicationType'){
+      dataResult= dataResult.sort((a, b) => (a.applicationType===null)-(b.applicationType===null) || +(a.applicationType>b.applicationType)||-(a.applicationType<b.applicationType));
+    }
+    if(sortType == 'DescendingApplicationType'){
+      dataResult= dataResult.sort((a, b) => (a.applicationType===null)-(b.applicationType===null) || +(a.applicationType>b.applicationType)||-(a.applicationType<b.applicationType)).reverse();
+    }
+
+    if(sortType == 'AscendingApplicationID'){
+      dataResult= dataResult.sort((a, b) => (a.applicationId===null)-(b.applicationId===null) || +(a.applicationId>b.applicationId)||-(a.applicationId<b.applicationId));
+    }
+    if(sortType == 'DescendingApplicationID'){
+      dataResult= dataResult.sort((a, b) => (a.applicationId===null)-(b.applicationId===null) || +(a.applicationId>b.applicationId)||-(a.applicationId
+        <b.applicationId)).reverse();
+    }
+
+    if(sortType == 'AscendingAction'){
+      dataResult= dataResult.sort((a, b) => (a.actionType===null)-(b.actionType===null) || +(a.actionType>b.actionType)||-(a.actionType<b.actionType));
+    }
+    if(sortType == 'DescendingAction'){
+      dataResult= dataResult.sort((a, b) => (a.actionType===null)-(b.actionType===null) || +(a.actionType>b.actionType)||-(a.actionType
+        <b.actionType)).reverse();
+    }
+
+    if(sortType == 'AscendingActionDetails'){
+      dataResult= dataResult.sort((a, b) => (a.logInfo===null)-(b.logInfo===null) || +(a.logInfo>b.logInfo)||-(a.logInfo<b.logInfo));
+    }
+    if(sortType == 'DescendingActionDetails'){
+      dataResult= dataResult.sort((a, b) => (a.logInfo===null)-(b.logInfo===null) || +(a.logInfo>b.logInfo)||-(a.logInfo
+        <b.logInfo)).reverse();
+    }
+
+
+
+    
+    if(sortType == 'AscendingDate'){
+      dataResult= dataResult.sort((a, b) => new Date(a.creationTimestamp) -new Date(b.creationTimestamp));
+    }
+    if(sortType == 'DescendingDate'){
+      dataResult= dataResult.sort((a, b) => new Date(a.creationTimestamp) -new Date(b.creationTimestamp)).reverse();
+    }
+
+    setData([...chunks(dataResult, 10)]);
+
+}
+
+
   const handleSearch = (
     employeeName,
     applicationType,
@@ -135,10 +191,12 @@ const LoggerSearch = ({ data, dispatch }) => {
         handleSearch={handleSearch}
         applicationsTypes={applicationsTypes}
         actionsTypes={actionsTypes}
+        removeFiltration={handleSearch}
+       
       />
 
       <div className="overflow-x-auto relative shadow-md sm:rounded-lg">
-        <TabelSection mainData={mainData} pagination={pagination} />
+        <TabelSection mainData={mainData} pagination={pagination}  sortData={sortData} />
         <PaginationSection
           setPagination={setPagination}
           mainData={mainData}

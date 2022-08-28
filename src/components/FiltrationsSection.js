@@ -83,7 +83,9 @@ return (
            placeholder="Select date" />
       </div>
 
-      <button   onClick={() => props.handleSearch(employeeName,applicationType,actionType,fromDate,toDate,applicationID)}   type="submit" className="text-white  w-[150px] bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-xs px-5 py-2 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Search Logger </button>
+      <button   onClick={() => props.handleSearch(employeeName,applicationType,actionType,fromDate,toDate,applicationID)}   type="submit" className=" mr-4  text-white  w-[150px] bg-blue-500   outline-none font-medium rounded-lg text-xs px-5 py-2 text-center dark:bg-blue-600">Search Logger </button>
+
+      <button   onClick={() => props.removeFiltration()}   type="submit" className="text-white  w-[150px] bg-blue-500   outline-none font-medium rounded-lg text-xs px-5 py-2 text-center dark:bg-blue-600 ">remove filtration </button>
 
 
     </section>

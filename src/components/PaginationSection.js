@@ -27,7 +27,7 @@ const PaginationSection = (props) => {
           {props.pagination > 0 ? (
             <Link
               onClick={() => props.setPagination(props.pagination - 1)}
-              to={"/?pagination=" + (props.pagination - 1)}
+              to={"/home/administration/logger-search/?pagination=" + (props.pagination - 1)}
             >
               <svg
                 className="w-5 h-5"
@@ -53,7 +53,7 @@ const PaginationSection = (props) => {
                   <li key={i + "pagination"}>
                     <Link
                       onClick={() =>  props.setPagination(i)}
-                      to={"/?pagination=" + i}
+                      to={"/home/administration/logger-search/?pagination=" + i}
                       className=" px-1 leading-tight text-gray-500  hover:text-blue-500"
                     >
                       {i + 1}
@@ -66,7 +66,7 @@ const PaginationSection = (props) => {
           {props.pagination < props.mainData.length - 1 ? (
             <Link
               onClick={() =>  props.setPagination(props.pagination + 1)}
-              to={"/?pagination=" + (props.pagination + 1)}
+              to={"/home/administration/logger-search/?pagination=" + (props.pagination + 1)}
             >
               <svg
                 className="w-5 h-5"
