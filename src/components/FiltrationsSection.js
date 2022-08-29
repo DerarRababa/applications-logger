@@ -18,6 +18,16 @@ const FiltrationsSection = (props) => {
   
     const [applicationID,setApplicationID ] = useState("")
 
+
+    const clearFiltrations= () =>{
+      props.removeFiltration()
+      setToDate('')
+      setFromDate("")
+      setApplicationID("")
+      setActionType("")
+      setApplicationType("")
+      setEmployeeName("")
+    }
     useEffect(() => { 
       const params = new URLSearchParams(window.location.search);
       params.get("application-id")?setApplicationID(params.get("application-id")):setApplicationID('');
@@ -85,7 +95,7 @@ return (
 
       <button   onClick={() => props.handleSearch(employeeName,applicationType,actionType,fromDate,toDate,applicationID)}   type="submit" className=" mr-4  text-white  w-[150px] bg-blue-500   outline-none font-medium rounded-lg text-xs px-5 py-2 text-center dark:bg-blue-600">Search Logger </button>
 
-      <button   onClick={() => props.removeFiltration()}   type="submit" className="text-white  w-[150px] bg-blue-500   outline-none font-medium rounded-lg text-xs px-5 py-2 text-center dark:bg-blue-600 ">remove filtration </button>
+      <button   onClick={() => clearFiltrations()}   type="submit" className="text-white  w-[150px] bg-blue-500   outline-none font-medium rounded-lg text-xs px-5 py-2 text-center dark:bg-blue-600 ">remove filtration </button>
 
 
     </section>
